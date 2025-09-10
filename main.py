@@ -11,9 +11,9 @@ server = Flask(__name__)
 
 load_dotenv()
 
-WEBHOOK_URL_BASE = os.getenv("WEBHOOK_URL_BASE")
-if not WEBHOOK_URL_BASE:
-    raise ValueError("WEBHOOK_URL_BASE не найден в переменных окружения")
+# WEBHOOK_URL_BASE = os.getenv("WEBHOOK_URL_BASE")
+# if not WEBHOOK_URL_BASE:
+#     raise ValueError("WEBHOOK_URL_BASE не найден в переменных окружения")
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 if not BOT_TOKEN:
@@ -74,7 +74,7 @@ def calculate_bmi(weight, height):
 
 def calculate_weight_plan(current_weight, height):
     height_m = height / 100
-    ideal_weight = 25 * (height_m ** 2)
+    ideal_weight = 24 * (height_m ** 2)
     excess_weight = current_weight - ideal_weight
     min_weight_loss = excess_weight * 0.6
     max_weight_loss = excess_weight * 0.8
@@ -249,23 +249,23 @@ def process_ok(call):
     )
     bot.answer_callback_query(call.id)
 
-@server.route('/' + BOT_TOKEN, methods=['POST'])
-def getMessage():
-    json_string = request.get_data().decode('utf-8')
-    update = telebot.types.Update.de_json(json_string)
-    bot.process_new_updates([update])
-    return "!", 200
+# @server.route('/' + BOT_TOKEN, methods=['POST'])
+# def getMessage():
+#     json_string = request.get_data().decode('utf-8')
+#     update = telebot.types.Update.de_json(json_string)
+#     bot.process_new_updates([update])
+#     return "!", 200
 
 @server.route('/healthcheck',  methods=['GET'])
 def healthcheck():
     return {"status": "alive"}, 200
 
-bot.remove_webhook()
-
-time.sleep(1)
-
-# Set webhook
-bot.set_webhook(url=f"{WEBHOOK_URL_BASE}/{BOT_TOKEN}")
+# bot.remove_webhook()
+#
+# time.sleep(1)
+#
+# # Set webhook
+# bot.set_webhook(url=f"{WEBHOOK_URL_BASE}/{BOT_TOKEN}")
 
 # Запуск бота
 if __name__ == "__main__":
